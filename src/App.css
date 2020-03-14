@@ -8,8 +8,10 @@
 
 #panel {
   background-color: black;
-  width: 20vw;
-  height: 30vh;
+  width: 60vw;
+  height: 50vh;
+
+  flex-wrap: wrap;
 }
 
 #display {
@@ -25,53 +27,61 @@
 #clear {
   background-color: brown;
   width: 50%;
-  height: 40px;
+  height: 60px;
   display: flex;
-  flex-grow: 5;
+  transition: all 0.1s ease-in-out;
   justify-content: center;
-  border: chocolate;
 }
 
 #clear:hover {
-  background-color: green;
+  background-color: cornflowerblue;
+  transform: scale(1.1);
+}
+
+button {
+  transition: all 0.1s ease-in-out;
+}
+
+button:hover {
+  background-color: cornflowerblue;
+
+  transform: scale(1.1);
 }
 #divide,
 #multiply {
   width: 25%;
-  height: 40px;
+  height: 60px;
   display: flex;
-  flex-grow: 5;
   justify-content: center;
 }
 .smallButtons {
   width: 25%;
-  height: 40px;
+  height: 60px;
   display: flex;
-  flex-grow: 5;
   justify-content: center;
 }
 
 #zero {
   max-width: 50%;
-  height: 40px;
+  height: 60px;
   display: flex;
   flex-grow: 5;
-  margin-top: -40px;
+  margin-top: -60px;
   justify-content: center;
 }
 #equals {
   display: flex;
   width: 25%;
-  height: 80px;
+  height: 120px;
   justify-content: center;
   align-items: center;
 }
 
 #decimal {
   width: 25%;
-  height: 40px;
+  height: 60px;
   display: flex;
-  margin-top: -40px;
+  margin-top: -60px;
   justify-content: center;
 }
 
