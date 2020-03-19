@@ -46,6 +46,7 @@ const Buttons = () => {
     setPreviousValue([]);
     setCurrentValue([]);
     setClear(false);
+    document.getElementById("decimal").disabled = false;
   };
 
   const handleOperators = e => {
@@ -72,8 +73,6 @@ const Buttons = () => {
 
   const handleFormula = () => {
     let newArr = [...previousValue, currentValue];
-
-    const reg = new RegExp("[x+-/*]$");
 
     while (
       newArr.lastIndexOf("x") === newArr.length - 1 ||
