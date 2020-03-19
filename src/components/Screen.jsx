@@ -3,7 +3,8 @@ import {
   CurrentValueContext,
   PrevValueContext,
   CountScreenContext,
-  InitContext
+  InitContext,
+  EqualPushContext
 } from "./Store";
 
 const Screen = () => {
@@ -11,13 +12,14 @@ const Screen = () => {
   const [previousValue, setPreviousvalue] = useContext(PrevValueContext);
   const [countScreen, setCountscreen] = useContext(CountScreenContext);
   const [init, setInit] = useContext(InitContext);
+  const [equalPush, setEqualPush] = useContext(EqualPushContext);
 
   return (
     <div id="display">
       <div id="fullformula">{countScreen}</div>
       <div id="singleinput">
         {init}
-        {currentValue}
+        {equalPush ? " " : currentValue}
       </div>
     </div>
   );

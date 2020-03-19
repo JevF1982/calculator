@@ -10,7 +10,7 @@ export const InitContext = createContext();
 
 const Store = ({ children }) => {
   const [currentValue, setCurrentValue] = useState([]);
-  const [previousValue, setPreviousValue] = useState(0);
+  const [previousValue, setPreviousValue] = useState([]);
   const [equalPush, setEqualPush] = useState(false);
   const [countScreen, setCountScreen] = useState([]);
   const [clear, setClear] = useState(false);

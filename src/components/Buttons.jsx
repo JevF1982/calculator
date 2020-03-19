@@ -4,7 +4,8 @@ import {
   PrevValueContext,
   CountScreenContext,
   ClearContext,
-  InitContext
+  InitContext,
+  EqualPushContext
 } from "./Store";
 
 const Buttons = () => {
@@ -13,37 +14,87 @@ const Buttons = () => {
   const [clear, setClear] = useContext(ClearContext);
   const [init, setInit] = useContext(InitContext);
   const [countScreen, setCountScreen] = useContext(CountScreenContext);
+  const [equalPush, setEqualPush] = useContext(EqualPushContext);
 
   const handleNumbers = e => {
+    // disable point
     if (e.target.value === ".") {
       document.getElementById("decimal").disabled = true;
     }
+
+    // not more than one leading zero regex
     const reg = new RegExp("^0[0-9].*$");
 
     setClear(true);
+
+    // clear initial zero
     setInit("");
     const newVal = [...currentValue, e.target.value].join("");
-    console.log(currentValue);
+
+    // test regex and set new value
     if (!reg.test(newVal)) {
       setCurrentValue(newVal);
     }
+
+    setEqualPush(false);
   };
 
   const handleClear = e => {
     setInit(0);
     setCurrentValue("");
     setCountScreen([]);
+    setPreviousValue([]);
+    setCurrentValue([]);
+    setClear(false);
   };
 
   const handleOperators = e => {
-    if (clear && e.target.value !== "-") {
-      const formula = [...countScreen, currentValue];
-      formula.push(" " + e.target.value + " ");
-      console.log(formula);
-      setCurrentValue([]);
+    // check if formula ends with negative sign regex
+    const endsWithNegativeSign = new RegExp("-$");
+
+    const formula = [...previousValue, currentValue];
+
+    if (
+      clear ||
+      (e.target.value === "-" && !endsWithNegativeSign.test(previousValue))
+    ) {
+      formula.push(e.target.value);
+
+      setCurrentValue("");
+      setPreviousValue(formula);
       setCountScreen(formula);
     }
+    // set input for numbers up again
     setClear(false);
+
+    document.getElementById("decimal").disabled = false;
+  };
+
+  const handleFormula = () => {
+    let newArr = [...previousValue, currentValue];
+
+    const reg = new RegExp("[x+-/*]$");
+
+    while (
+      newArr.lastIndexOf("x") === newArr.length - 1 ||
+      newArr.lastIndexOf("/") === newArr.length - 1 ||
+      newArr.lastIndexOf("+") === newArr.length - 1 ||
+      newArr.lastIndexOf("") === newArr.length - 1 ||
+      newArr.lastIndexOf("-") === newArr.length - 1
+    ) {
+      newArr.pop();
+    }
+
+    newArr = newArr
+      .map(item => {
+        return item.replace("x", "*");
+      })
+      .join("");
+
+    console.log(newArr);
+
+    setCountScreen(eval(newArr));
+    setEqualPush(true);
     document.getElementById("decimal").disabled = false;
   };
 
@@ -148,7 +199,7 @@ const Buttons = () => {
         3
       </button>
 
-      <button id="equals" value="=">
+      <button id="equals" value="=" onClick={handleFormula}>
         =
       </button>
 
