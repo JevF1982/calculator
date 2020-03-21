@@ -10,8 +10,6 @@ import {
 
 import { evaluate } from "mathjs";
 
-let newVal = [];
-
 const Buttons = () => {
   const [currentValue, setCurrentValue] = useContext(CurrentValueContext);
   const [previousValue, setPreviousValue] = useContext(PrevValueContext);
@@ -45,12 +43,7 @@ const Buttons = () => {
 
     // clear initial zero
     setInit("");
-
-    if (currentValue.length > 0) {
-      newVal = [...currentValue, e.target.value].join("");
-    } else {
-      newVal = e.target.value;
-    }
+    const newVal = [...currentValue, e.target.value].join("");
 
     // test regex and set new value
     if (!reg.test(newVal)) {
