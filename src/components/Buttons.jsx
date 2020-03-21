@@ -8,6 +8,8 @@ import {
   EqualPushContext
 } from "./Store";
 
+import { evaluate } from "mathjs";
+
 const Buttons = () => {
   const [currentValue, setCurrentValue] = useContext(CurrentValueContext);
   const [previousValue, setPreviousValue] = useContext(PrevValueContext);
@@ -15,6 +17,18 @@ const Buttons = () => {
   const [init, setInit] = useContext(InitContext);
   const [countScreen, setCountScreen] = useContext(CountScreenContext);
   const [equalPush, setEqualPush] = useContext(EqualPushContext);
+
+  const trimLastOperator = e => {
+    while (
+      e.lastIndexOf("x") === e.length - 1 ||
+      e.lastIndexOf("/") === e.length - 1 ||
+      e.lastIndexOf("+") === e.length - 1 ||
+      e.lastIndexOf("") === e.length - 1 ||
+      e.lastIndexOf("-") === e.length - 1
+    ) {
+      e.pop();
+    }
+  };
 
   const handleNumbers = e => {
     // disable point
@@ -60,11 +74,18 @@ const Buttons = () => {
       (e.target.value === "-" && !endsWithNegativeSign.test(previousValue))
     ) {
       formula.push(e.target.value);
-
-      setCurrentValue("");
-      setPreviousValue(formula);
-      setCountScreen(formula);
+    } else if (
+      e.target.value === "+" ||
+      e.target.value === "x" ||
+      e.target.value === "/"
+    ) {
+      trimLastOperator(formula);
+      formula.push(e.target.value);
     }
+
+    setCurrentValue("");
+    setPreviousValue(formula);
+    setCountScreen(formula);
     // set input for numbers up again
     setClear(false);
 
@@ -74,26 +95,28 @@ const Buttons = () => {
   const handleFormula = () => {
     let newArr = [...previousValue, currentValue];
 
-    while (
-      newArr.lastIndexOf("x") === newArr.length - 1 ||
-      newArr.lastIndexOf("/") === newArr.length - 1 ||
-      newArr.lastIndexOf("+") === newArr.length - 1 ||
-      newArr.lastIndexOf("") === newArr.length - 1 ||
-      newArr.lastIndexOf("-") === newArr.length - 1
-    ) {
-      newArr.pop();
+    trimLastOperator(newArr);
+
+    if (newArr.length > 0) {
+      newArr = newArr
+        .map(item => {
+          if (typeof item === "string") {
+            return item.replace("x", "*");
+          }
+          return item;
+        })
+        .join("");
+
+      setCountScreen(evaluate(newArr));
+      setCurrentValue(evaluate(newArr));
     }
 
-    newArr = newArr
-      .map(item => {
-        return item.replace("x", "*");
-      })
-      .join("");
+    setCurrentValue(evaluate(newArr));
 
+    setEqualPush(true);
+    setPreviousValue([]);
     console.log(newArr);
 
-    setCountScreen(eval(newArr));
-    setEqualPush(true);
     document.getElementById("decimal").disabled = false;
   };
 
