@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Orbitron&display=swap");
+
 .App {
   display: flex;
   justify-content: center;
@@ -15,7 +17,9 @@
 }
 
 #display {
-  color: white;
+  color: green;
+  font-size: 20px;
+  font-family: "Orbitron", sans-serif;
 }
 .buttons {
   display: flex;
